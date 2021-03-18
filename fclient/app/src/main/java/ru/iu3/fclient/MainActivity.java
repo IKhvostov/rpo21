@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onButtonClick(View v)
     {
         //A.
-        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
         //B.
         /*
         byte[] key = StringToHex("0123456789ABCDEF0123456789ABCDE0");
@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         Intent it = new Intent(this, PinpadActivity.class);
         startActivity(it); */
         //D.
-       // Intent it = new Intent(this, PinpadActivity.class);
-       // startActivityForResult(it, 0);
+        Intent it = new Intent(this, PinpadActivity.class);
+        startActivityForResult(it, 0);
     }
 
 
