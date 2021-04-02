@@ -1,16 +1,24 @@
 package ru.iu3.fclient;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
-
-
-
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.io.IOUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +56,22 @@ public class MainActivity extends AppCompatActivity {
      */
 
     @Override
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button btn = findViewById(R.id.btnClickMe);
+        btn.setOnClickListener((View v) -> { onButtonClick(v);});
+
+        int res = initRng();
+        Log.i("fclient", "Init Rng = " + res);
+        byte[] v = randomBytes(10);
+
+    }
+
+    @Override
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         setContentView(R.layout.activity_main);
@@ -68,21 +92,57 @@ public class MainActivity extends AppCompatActivity {
         //A.
         //Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
         //B.
-        /*
-        byte[] key = StringToHex("0123456789ABCDEF0123456789ABCDE0");
+        /*byte[] key = StringToHex("0123456789ABCDEF0123456789ABCDE0");
         byte[] enc = encrypt(key, StringToHex("000000000000000102"));
         byte[] dec = decrypt(key, enc);
         String s = new String(Hex.encodeHex(dec)).toUpperCase();
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show(); */
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();*/
         //C.
-        /*
-        Intent it = new Intent(this, PinpadActivity.class);
-        startActivity(it); */
+        /*Intent it = new Intent(this, PinpadActivity.class);
+        startActivity(it);*/
         //D.
-        Intent it = new Intent(this, PinpadActivity.class);
-        startActivityForResult(it, 0);
+        /*Intent it = new Intent(this, PinpadActivity.class);
+        startActivityForResult(it, 0);*/
+        TestHttpClient();
     }
 
+    protected void TestHttpClient()
+    {
+        new Thread(()->{
+            try {
+                HttpURLConnection uc = (HttpURLConnection) (new URL("http://10.0.2.2:8081/api/v1/title").openConnection());
+                InputStream inputStream = uc.getInputStream();
+                String html = IOUtils.toString(inputStream);
+                String title = getPageTitle(html);
+                runOnUiThread(()->{
+                    Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception ex) {
+                Log.e("fapptag", "Http client fails", ex);
+            }
+        }).start();
+    }
+
+    protected String getPageTitle(String html)
+    {
+        Pattern pattern = Pattern.compile("<title>(.+?)</title>", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(html);
+        String p;
+        if (matcher.find())
+            p = matcher.group(1);
+        else
+            p = "Not found";
+        return p; /*
+        int pos = html.indexOf("<title");
+        String p = "not found";
+        if (pos >= 0)
+        {
+            int pos2 = html.indexOf("<", pos + 1);
+            if (pos >= 0)
+                p = html.substring(pos + 7, pos2);
+        }
+        return p; */
+    }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
