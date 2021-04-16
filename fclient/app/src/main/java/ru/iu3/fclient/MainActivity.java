@@ -12,51 +12,24 @@ import android.widget.Toast;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.io.IOUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     // Used to load the 'native-lib' library on application startup.
-
     static {
-
         System.loadLibrary("native-lib");
-
         System.loadLibrary("mbedcrypto");
-
         //initRng();
-
     }
-
-    public static byte[] StringToHex(String s)
-    {
-        byte[] hex;
-        try
-        {
-            hex = Hex.decodeHex(s.toCharArray());
-        }
-            catch (DecoderException ex)
-        {
-            hex = null;
-        }
-        return hex;
-    }
-    /**
-
-     * A native method that is implemented by the 'native-lib' native library,
-
-     * which is packaged with this application.
-
-     */
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -64,14 +37,31 @@ public class MainActivity extends AppCompatActivity {
         Button btn = findViewById(R.id.btnClickMe);
         btn.setOnClickListener((View v) -> { onButtonClick(v);});
 
+
         int res = initRng();
         Log.i("fclient", "Init Rng = " + res);
         byte[] v = randomBytes(10);
 
+
+        /*byte[] rnd = randomBytes(16);
+        byte[] data = {1,2,3,4,5,6,7,8};
+        byte[] encText = encrypt(rnd, data);
+        byte[] decText = decrypt(rnd, encText);*/
+
+
+
+        // Example of a call to a native method
+       /*TextView tv = findViewById(R.id.sample_text);
+        tv.setText(stringFromJNI());*/
+
     }
 
-    @Override
+    /**
+     * A native method that is implemented by the 'native-lib' native library,
+     * which is packaged with this application.
+     */
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         setContentView(R.layout.activity_main);
@@ -85,6 +75,19 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+    public static byte[] StringToHex(String s)
+    {
+        byte[] hex;
+        try
+        {
+            hex = Hex.decodeHex(s.toCharArray());
+        }
+        catch (DecoderException ex)
+        {
+            hex = null;
+        }
+        return hex;
     }
 
     protected void onButtonClick(View v)
@@ -132,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
             p = matcher.group(1);
         else
             p = "Not found";
-        return p; /*
-        int pos = html.indexOf("<title");
+        return p;
+        /*int pos = html.indexOf("<title");
         String p = "not found";
         if (pos >= 0)
         {
@@ -141,16 +144,13 @@ public class MainActivity extends AppCompatActivity {
             if (pos >= 0)
                 p = html.substring(pos + 7, pos2);
         }
-        return p; */
+        return p;*/
     }
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
+
     public native String stringFromJNI();
     public static native int initRng();
     public static native byte[] randomBytes(int no);
-    public static native byte[] encrypt(byte[] key,byte[] data);
-    public static native byte[] decrypt(byte[] key,byte[] data);
+    public static native byte[] encrypt(byte[] key, byte[] data);
+    public static native byte[] decrypt(byte[] key, byte[] data);
 }
