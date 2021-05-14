@@ -113,7 +113,9 @@ public class MainActivity extends AppCompatActivity {
     {
         new Thread(()->{
             try {
+                //создает http соединение к нашей странице
                 HttpURLConnection uc = (HttpURLConnection) (new URL("http://10.0.2.2:8081/api/v1/title").openConnection());
+                //http://www.wikipedia.org
                 InputStream inputStream = uc.getInputStream();
                 String html = IOUtils.toString(inputStream);
                 String title = getPageTitle(html);
