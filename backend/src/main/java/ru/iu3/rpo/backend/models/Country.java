@@ -11,12 +11,8 @@ import java.util.List;
 @Access(AccessType.FIELD)
 public class Country {
 
-    public Country() {
-    }
-
-    public Country(Long id) {
-        this.id = id;
-    }
+    public Country() {}
+    public Country(Long id) {this.id = id;}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +21,8 @@ public class Country {
 
     @Column(name = "name", nullable = false, unique = true)
     public String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "country")
+    public List<Artist> artists = new ArrayList<Artist>();
 }
