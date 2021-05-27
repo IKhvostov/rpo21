@@ -35,6 +35,7 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
     }
 
     @Override
+    //для извлечения информации о пользователе
     protected UserDetails retrieveUser(String userName,
                                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
         Object token = usernamePasswordAuthenticationToken.getCredentials();

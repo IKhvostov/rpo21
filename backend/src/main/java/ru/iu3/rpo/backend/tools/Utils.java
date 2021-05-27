@@ -4,6 +4,7 @@ import org.springframework.security.crypto.codec.Hex;
 import java.security.MessageDigest;
 
 public class Utils {
+    //вычисляет SHA-256
     public static String ComputeHash(String pwd, String salt)
     {
         MessageDigest digest;
