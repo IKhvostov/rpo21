@@ -35,9 +35,7 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
     }
 
     @Override
-    //для извлечения информации о пользователе
-    protected UserDetails retrieveUser(String userName,
-                                       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
+    protected UserDetails retrieveUser(String userName, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
         Object token = usernamePasswordAuthenticationToken.getCredentials();
         Optional<ru.iu3.rpo.backend.models.User> uu = userRepository.findByToken(String.valueOf(token));
         if (uu.isEmpty())

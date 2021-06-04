@@ -10,10 +10,16 @@ import {connect} from "react-redux";
 import CountryListComponent from "./components/CountryListComponent";
 import CountryComponent from "./components/CountryComponent";
 import SideBar from "./components/SideBar";
+import ArtistListComponent from "./components/ArtistListComponent";
+import PaintingListComponent from "./components/PaintingListComponent";
+import MuseumListComponent from "./components/MuseumListComponent";
+import UserListComponent from "./components/UserListComponent";
+import MyAccountComponent from "./components/MyAccountComponent";
+import MuseumComponent from "./components/MuseumComponent";
 
 
 const AuthRoute = props => {
-    let user = Utils.getUserName();
+    let user = Utils.getUser();
     if (!user) return <Redirect to="/login" />;
     return <Route {...props} />;
 };
@@ -36,6 +42,12 @@ function App(props) {
                             <AuthRoute path="/home" component={Home} />
                             <AuthRoute path="/countries" exact component={CountryListComponent}/>
                             <AuthRoute path="/countries/:id" component={CountryComponent}/>
+                            <AuthRoute path="/artists" exact component={ArtistListComponent}/>
+                            <AuthRoute path="/paintings" exact component={PaintingListComponent}/>
+                            <AuthRoute path="/museums" exact component={MuseumListComponent}/>
+                            <AuthRoute path="/museums/:id" component={MuseumComponent}/>
+                            <AuthRoute path="/users" exact component={UserListComponent}/>
+                            <AuthRoute path="/myaccount" exact component={MyAccountComponent}/>
                             <Route path="/login" component={Login} />
                         </Switch>
                     </div>
